@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/appbg"
+
+    tools:context="com.example.com.satyvijaycargarage.HomePage">
+
+
+
+<LinearLayout
+    android:layout_marginTop="20dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   android:layout_gravity="center"
+    android:orientation="vertical"
+   >
+
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:layout_gravity="center">
+        <!--<LinearLayout-->
+            <!--android:id="@+id/l1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_weight="1">-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/c1"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:cardMaxElevation="20dp"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/body_icon"/>
+
+
+
+
+
+                <!--<LinearLayout-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
+                <!--<ImageView-->
+                <!--android:id="@+id/img1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/bodyworker2"-->
+
+                <!--android:layout_gravity="center"-->
+
+                <!--/>-->
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="3dp"-->
+                        <!--android:background="@color/background"-->
+                        <!--/>-->
+                <!--<TextView-->
+                <!--android:id="@+id/t1"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/body_work_text"-->
+                <!--android:text="@string/body_work"-->
+                <!--android:textColor="@color/colorPrimary"-->
+                <!--android:layout_gravity="center"-->
+                    <!--android:textSize="20sp"-->
+
+                <!--android:gravity="center"-->
+                    <!--/>-->
+                <!--</LinearLayout>-->
+            </android.support.v7.widget.CardView>
+            <!--<ImageView-->
+            <!--android:id="@+id/img1"-->
+            <!--android:layout_width="110dp"-->
+            <!--android:layout_height="110dp"-->
+            <!--android:background="@drawable/bodyworker2"-->
+            <!--android:layout_gravity="center"-->
+
+            <!--/>-->
+            <!--<ImageView-->
+            <!--android:id="@+id/t1"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="wrap_content"-->
+          <!--android:src="@drawable/body_work_text"-->
+
+
+           <!--android:layout_gravity="center"-->
+
+            <!--/>-->
+        <!--</LinearLayout>-->
+        <LinearLayout
+
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            >
+
+        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/l2"-->
+
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical"-->
+            <!--&gt;-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/c2"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:cardMaxElevation="20dp"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/engine_icon"/>
+
+                <!--<LinearLayout-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
+            <!--<ImageView-->
+            <!--android:id="@+id/img2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+            <!--android:background="@drawable/mechanicalworker"/>-->
+
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="3dp"-->
+                        <!--android:background="@color/background"-->
+                        <!--/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/t2"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:src="@drawable/body_work_text"-->
+                    <!--android:text="@string/Mechanical_work"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:textSize="20sp"-->
+
+                    <!--android:gravity="center"-->
+                    <!--/>-->
+                <!--</LinearLayout>-->
+            </android.support.v7.widget.CardView>
+        <!--</LinearLayout>-->
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/c3"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cardMaxElevation="20dp"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp">
+
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/painting_icon"/>
+
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
+        <!--<ImageView-->
+        <!--android:id="@+id/img3"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/painter" />-->
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="3dp"-->
+                    <!--android:background="@color/background"-->
+                    <!--/>-->
+                <!--<TextView-->
+                    <!--android:id="@+id/t3"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+
+                    <!--android:text="@string/painting_work"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:textSize="20sp"-->
+
+                    <!--android:gravity="center"-->
+                    <!--/>-->
+            <!--</LinearLayout>-->
+        </android.support.v7.widget.CardView>
+
+
+
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            >
+        </LinearLayout>
+
+
+
+
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/c4"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cardMaxElevation="20dp"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/electric_icon"/>
+
+
+            <!--<LinearLayout-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/img4"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:src="@drawable/electricalworker"-->
+
+                    <!--/>-->
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="3dp"-->
+                    <!--android:background="@color/background"-->
+                    <!--/>-->
+        <!--<TextView-->
+        <!--android:id="@+id/t4"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/electric_work"-->
+        <!--android:textColor="@color/colorAccent"-->
+       <!--android:textSize="20sp"-->
+       <!--android:layout_gravity="center"-->
+
+
+       <!--/>-->
+            <!--</LinearLayout>-->
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/c5"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                app:cardMaxElevation="20dp"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/about_us_icon"/>
+
+
+                <!--<LinearLayout-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical">-->
+                    <!--<ImageView-->
+                        <!--android:id="@+id/img6"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:src="@drawable/about_us"-->
+                        <!--/>-->
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="3dp"-->
+                        <!--android:background="@color/background"-->
+                        <!--/>-->
+                    <!--<TextView-->
+                        <!--android:id="@+id/t6"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="@string/about_us"-->
+                        <!--android:textColor="@color/colorAccent"-->
+                        <!--android:textSize="20sp"-->
+
+
+                        <!--android:layout_gravity="center"-->
+                        <!--/>-->
+                <!--</LinearLayout>-->
+            </android.support.v7.widget.CardView>
+
+
+
+        <LinearLayout
+            android:layout_width="20dp"
+            android:layout_height="wrap_content"
+            >
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/c6"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            app:cardMaxElevation="20dp"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="10dp">
+
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/contact_us_icon"/>
+
+            <!--<LinearLayout-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+        <!--<ImageView-->
+        <!--android:id="@+id/img5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:background="@drawable/contact_us_icon_final"-->
+
+
+
+        <!--/>-->
+        <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="3dp"-->
+        <!--android:background="@color/background"-->
+        <!--/>-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/insorance"-->
+        <!--android:textColor="@color/colorAccent"-->
+        <!--android:textSize="20sp"-->
+
+
+        <!--android:layout_gravity="center"-->
+        <!--/>-->
+        <!--</LinearLayout>-->
+        </android.support.v7.widget.CardView>
+
+
+
+    </LinearLayout>
+</LinearLayout>
+
+
+
+
+
+
+</ScrollView>
