@@ -1,0 +1,1152 @@
+package com.alphaebarcode.feedbackforminput;
+
+import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.alphaebarcode.feedbackforminput.Models.AccountDetail_ForFeedBackModel.ResultAccountDetailsFeedBack;
+import com.alphaebarcode.feedbackforminput.Models.GetFeedBackFormResult;
+import com.alphaebarcode.feedbackforminput.Models.ModelResult;
+import com.alphaebarcode.feedbackforminput.Models.ResultModel;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
+public class Dynamic_Feedback extends AppCompatActivity {
+    NestedScrollView nestedscrollID;
+    TextView txt_remarks, title_lable, chekText, remarks, remarks1, drpText, lans1,
+            acntName, rdbtxt, rstrtxt, checkedtxt, isrequerdIconchk, isrequerdIcondrp,
+            isrequerdIconclans, isrequerdIconrdb, isrequerdIconrstr;
+    Button submit_result;
+    RatingBar ratingBar;
+    String s, pos, LongAns1, newitem, ALLRadioButton = "", AccountName, AccountMobile, AcntName, AllRatingstr, msg;
+    int feedbackID = 0, AcountID, index = 0, indexx = 0, Ratingindex = 0, feedbackFormID = 0;
+    LinearLayout l1, l123, questionLayout, questionLayout1, questionLayout2, questionLayout3, questionLayout4;
+    CheckBox checkBox;
+    RadioButton radioButton;
+    Spinner spinner123;
+    EditText edt_lans1;
+    ColorStateList colorStateList;
+    ArrayList<String> spinnerArray, anstype123, questionIDAndAns, AllCheckbox;
+    ArrayList<ResultAccountDetailsFeedBack> arr_ResultAccountDetailsFeedBack;
+    public ArrayList<ResultModel> arr_Result;
+    public ArrayList<ModelResult> arrLstResult;
+    GetFeedBackFormResult data;
+    ResultAccountDetailsFeedBack resultAccountDetailsFeedBack;
+    boolean True;
+    ResultModel resultModel;
+    ModelResult modelResult;
+    Boolean b123, b12345;
+    ArrayList<String> ratingStrvalue;
+    int rstr, valrat, chkID = 0, drpID = 0, edtID = 0, rdbID = 0, rstrID = 0;
+    SweetAlertDialog pDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dynamic_feedback);
+        try {
+
+            nestedscrollID = (NestedScrollView) findViewById(R.id.nestedscrollID);
+            txt_remarks = (TextView) findViewById(R.id.txt_remarks);
+            title_lable = (TextView) findViewById(R.id.title_lable);
+            title_lable.setVisibility(View.GONE);
+            acntName = (TextView) findViewById(R.id.acntName);
+            Intent i = getIntent();
+            AcountID = i.getIntExtra("AcountID", 0);
+            AccountName = "Welcome" + "\t(" + i.getStringExtra("AccountName") + ")";
+            AcntName = i.getStringExtra("AccountName");
+            AccountMobile = i.getStringExtra("AccountMobile");
+            resultAccountDetailsFeedBack = new ResultAccountDetailsFeedBack();
+            resultAccountDetailsFeedBack.setAcID(i.getIntExtra("AcountID", 0));
+            resultAccountDetailsFeedBack.setAcName(i.getStringExtra("AccountName"));
+            resultAccountDetailsFeedBack.setAcMobile(i.getStringExtra("AccountMobile"));
+            acntName.setText(AccountName);
+            acntName.setTypeface(Typeface.DEFAULT_BOLD);
+            l1 = (LinearLayout) findViewById(R.id.layout_id);
+            l1.setOrientation(LinearLayout.VERTICAL);
+            l1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try  {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                    } catch (Exception e) {
+
+                    }
+                }
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                nestedscrollID.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        try  {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                        } catch (Exception e) {
+
+                        }
+                    }
+                });
+            }
+
+            GetFeedBackForm();
+            colorStateList = new ColorStateList(
+                    new int[][]{
+                            new int[]{-android.R.attr.state_checked}, // unchecked
+                            new int[]{android.R.attr.state_checked}  // checked
+                    },
+                    new int[]{
+                            R.color.bg_bubble_self,
+                            R.color.colorPrimaryDark
+                    }
+            );
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void GetFeedBackForm() {
+
+        try {
+
+
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        String url = "http://192.168.1.101:81/ExtremeWS.svc/GetFeedBackForm";
+        RequestQueue queue = Volley.newRequestQueue(Dynamic_Feedback.this);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject GetFeedBackFormResult = response.getJSONObject("GetFeedBackFormResult");
+                    if (GetFeedBackFormResult.getBoolean("HasError")) {
+                        GetFeedBackFormResult.getInt("ErrorCode");
+                    } else {
+                        JSONObject Feedbackform12 = GetFeedBackFormResult.getJSONObject("Feedbackform");
+                        onResult(GetFeedBackFormResult);
+                        progressDialog.dismiss();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Failure Callback
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Dynamic_Feedback.this);
+                        alertDialogBuilder.setMessage(error.getMessage());
+                        alertDialogBuilder.show();
+                    }
+                }) {
+            /** Passing some request headers* */
+            @Override
+            public Map getHeaders() {
+                HashMap headers = new HashMap();
+                headers.put("dvd", Helper.dvd);
+                headers.put("tkt", Helper.tkt);
+                return headers;
+            }
+
+        };
+        queue.add(jsonObjReq);
+        }catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void onResult(JSONObject feedbackform12) {
+        try {
+            data = new Gson().fromJson(feedbackform12.toString(), GetFeedBackFormResult.class);
+            final int[] colors = {Color.parseColor("#007dff"), Color.parseColor("#003366")};
+            GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            gd.setCornerRadius(0f);
+            title_lable.setText(data.Feedbackform.Title);
+            txt_remarks.setText(data.Feedbackform.Remarks);
+            feedbackID = data.Feedbackform.FeedbackFormID;
+            anstype123 = new ArrayList<>();
+            questionIDAndAns = new ArrayList<String>();
+            spinnerArray = new ArrayList<String>();
+            resultModel = new ResultModel();
+            arr_ResultAccountDetailsFeedBack = new ArrayList<>();
+            arr_Result = new ArrayList<>();
+            arrLstResult = new ArrayList<>();
+            AllCheckbox = new ArrayList<>();
+            View line;
+            final List<EditText> allEds = new ArrayList<EditText>();
+            final List<Spinner> allSpinner = new ArrayList<Spinner>();
+            final List<RatingBar> allRatingBar = new ArrayList<RatingBar>();
+            for (int i = 0; i < data.Feedbackform.lstFeedbackFormQuestion.size(); i++) {
+                feedbackFormID = data.Feedbackform.FeedbackFormID;
+                spinnerArray = new ArrayList<String>();
+                resultModel = new ResultModel();
+                modelResult = new ModelResult();
+                l1.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                if (data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType.equals("CHK")) {
+                    resultModel.setFeedBackFormQuotationID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setQuestion(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    resultModel.setRequired(data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired);
+                    modelResult.setFeedbackFormQuestionID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    s = data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType;
+                    line = new View(this);
+                    LinearLayout.LayoutParams buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowborder));
+                    l1.addView(line);
+                    LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams.setMargins(50, 30, 10, 1);
+                    questionLayout = new LinearLayout(this);
+                    questionLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    questionLayout.setLayoutParams(buttonLayoutParams);
+                    questionLayout.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    checkedtxt = new TextView(this);
+                    checkedtxt.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    checkedtxt.setTextColor(getResources().getColor(R.color.blueColor));
+                    checkedtxt.setTextSize(18);
+                    LinearLayout.LayoutParams chkquestionmargin = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    chkquestionmargin.setMargins(0, 0, 5, 0);
+                    checkedtxt.setLayoutParams(chkquestionmargin);
+                    questionLayout.addView(checkedtxt);
+                    isrequerdIconchk = new TextView(this);
+                    isrequerdIconchk.setText("*");
+                    isrequerdIconchk.setTextSize(18);
+                    isrequerdIconchk.setTextColor(getResources().getColor(R.color.red));
+                    isrequerdIconchk.setGravity(Gravity.TOP);
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired.equals(false)) {
+                        isrequerdIconchk.setVisibility(View.GONE);
+                    }
+                    resultModel.setvID(questionLayout);
+                    arr_Result.add(resultModel);
+                    questionLayout.addView(isrequerdIconchk);
+                    l1.addView(questionLayout);
+                    remarks = new TextView(this);
+                    LinearLayout.LayoutParams buttonLayoutParams12345 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12345.setMargins(50, 5, 20, 30);
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks.equals("")) {
+                        remarks.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks);
+                    } else {
+                        remarks.setText("(" + data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks + ")");
+                    }
+                    remarks.setTextColor(getResources().getColor(R.color.blueColor));
+                    remarks.setTextSize(10);
+                    remarks.setLayoutParams(buttonLayoutParams12345);
+                    l1.addView(remarks);
+                    l123 = new LinearLayout(this);
+                    LinearLayout.LayoutParams buttonLayoutParams12 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12.setMargins(80, 20, 0, 20);
+                    l123.setLayoutParams(buttonLayoutParams12);
+                    l123.setOrientation(LinearLayout.HORIZONTAL);
+                    l123.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    for (int j = 0; j < data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.size(); j++) {
+                        anstype123.add(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(j).OptionValue);
+                        checkBox = new CheckBox(this);
+                        checkBox.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(j).OptionValue);
+                        checkBox.setTextColor(getResources().getColor(R.color.greycolor));
+                        checkBox.setChecked(True);
+                        b123 = data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired;
+                        checkBox.setPadding(10, 0, 30, 0);
+                        checkBox.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp);
+                        checkBox.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                        chkID = checkBox.getId();
+                        Log.d("chkboxID", checkBox.getId() + "");
+                        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @SuppressLint("NewApi")
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                try  {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                } catch (Exception e) {
+
+                                }
+
+                                if (buttonView.isChecked()) {
+                                    for (int k = 0; k < arr_Result.size(); k++) {
+                                        int a = arr_Result.get(k).getFeedBackFormQuotationID();
+                                        int b = buttonView.getId();
+                                        if (a == b) {
+                                            AllCheckbox = new ArrayList<>();
+                                            String c = arr_Result.get(k).getFeedBackFormAnswer();
+                                            String[] d = c.split(",");
+                                            for (int l = 0; l < d.length; l++) {
+                                                AllCheckbox.add(d[l]);
+                                            }
+                                            AllCheckbox.add(buttonView.getText().toString());
+                                            StringBuilder sb1 = new StringBuilder();
+                                            for (String str1 : AllCheckbox) {
+                                                sb1.append(str1.toString());
+                                                sb1.append(";");
+                                            }
+                                            newitem = sb1 + "";
+                                            arr_Result.get(k).setFeedBackFormAnswer(newitem);
+                                            modelResult.setFeedBackFormAnswer(newitem);
+                                            arr_Result.get(k).getvID().setBackgroundColor(Color.TRANSPARENT);
+                                        }
+                                    }
+                                    buttonView.setButtonDrawable(R.drawable.ic_check_box_black_24dp);
+                                    buttonView.setCompoundDrawablePadding(5);
+                                } else {
+                                    for (int k = 0; k < arr_Result.size(); k++) {
+                                        int a = arr_Result.get(k).getFeedBackFormQuotationID();
+                                        int b = buttonView.getId();
+                                        if (a == b) {
+                                            AllCheckbox = new ArrayList<>();
+                                            String c = arr_Result.get(k).getFeedBackFormAnswer();
+                                            String[] d = c.split(",");
+                                            for (int l = 0; l < d.length; l++) {
+                                                AllCheckbox.remove(d[l]);
+                                            }
+                                            AllCheckbox.remove(buttonView.getText().toString());
+                                            StringBuilder sb1 = new StringBuilder();
+                                            for (String str1 : AllCheckbox) {
+                                                sb1.append(str1.toString());
+                                                sb1.append(";");
+                                            }
+                                            newitem = sb1 + "";
+                                            arr_Result.get(k).setFeedBackFormAnswer(newitem);
+                                            modelResult.setFeedBackFormAnswer(newitem);
+                                        }
+                                    }
+                                    buttonView.setButtonDrawable(R.drawable.ic_check_box_outline_blank_black_24dp);
+                                    buttonView.setCompoundDrawablePadding(5);
+                                }
+                                arrLstResult.add(modelResult);
+                            }
+                        });
+                        l123.addView(checkBox);
+                    }
+                    l1.addView(l123);
+                    line = new View(this);
+                    buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowbacgroundopposite));
+                    l1.addView(line);
+                } else if (data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType.equals("DRP")) {
+                    line = new View(this);
+                    LinearLayout.LayoutParams buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowborder));
+                    l1.addView(line);
+                    LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams.setMargins(50, 30, 10, 1);
+                    questionLayout1 = new LinearLayout(this);
+                    questionLayout1.setOrientation(LinearLayout.HORIZONTAL);
+                    questionLayout1.setLayoutParams(buttonLayoutParams);
+                    questionLayout1.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setvID(questionLayout1);
+                    drpText = new TextView(this);
+                    LinearLayout.LayoutParams buttonLayoutParamsdrp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamsdrp.setMargins(0, 0, 5, 0);
+                    drpText.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    drpText.setTextColor(getResources().getColor(R.color.blueColor));
+                    drpText.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    drpText.setTextSize(18);
+                    drpText.setLayoutParams(buttonLayoutParamsdrp);
+                    resultModel.setFeedBackFormQuotationID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setQuestion(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    resultModel.setRequired(data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired);
+                    modelResult.setFeedbackFormQuestionID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    arr_Result.add(resultModel);
+                    questionLayout1.addView(drpText);
+                    isrequerdIcondrp = new TextView(this);
+                    isrequerdIcondrp.setText("*");
+                    isrequerdIcondrp.setTextSize(18);
+                    isrequerdIcondrp.setTextColor(getResources().getColor(R.color.red));
+                    isrequerdIcondrp.setGravity(Gravity.TOP);
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired.equals(false)) {
+                        isrequerdIcondrp.setVisibility(View.GONE);
+                    }
+                    questionLayout1.addView(isrequerdIcondrp);
+                    l1.addView(questionLayout1);
+                    spinner123 = new Spinner(this);
+                    spinner123.setBackgroundResource(R.drawable.border2);
+                    allSpinner.add(spinner123);
+                    LinearLayout.LayoutParams buttonLayoutParams12345 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12345.setMargins(50, 5, 20, 30);
+                    chekText = new TextView(this);
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks.equals("")) {
+                        chekText.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks);
+                    } else {
+                        chekText.setText("(" + data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks + ")");
+                    }
+                    chekText.setTextColor(getResources().getColor(R.color.blueColor));
+                    chekText.setTextSize(10);
+                    chekText.setLayoutParams(buttonLayoutParams12345);
+                    l1.addView(chekText);
+                    LinearLayout.LayoutParams buttonLayoutParamsspinner = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamsspinner.setMargins(80, 20, 70, 20);
+                    spinner123.setLayoutParams(buttonLayoutParamsspinner);
+                    spinner123.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    drpID = spinner123.getId();
+                    spinner123.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            pos = parent.getItemAtPosition(position).toString();
+                            Log.d("SpinnerItem", pos);
+                            for (int j = 0; j < arr_Result.size(); j++) {
+                                for (int i = 0; i < allSpinner.size(); i++) {
+                                    indexx = allSpinner.get(i).getId();
+                                    if (indexx != 0) {
+                                        int spinnerId = indexx;
+                                        int arrListID = arr_Result.get(j).FeedBackFormQuotationID;
+                                        if (spinnerId == arrListID) {
+                                            if (allSpinner.get(i).getSelectedItem().toString() == " Select Item") {
+                                                arr_Result.get(j).setFeedBackFormAnswer("");
+                                            } else {
+                                                arr_Result.get(j).setFeedBackFormAnswer(allSpinner.get(i).getSelectedItem().toString());
+                                                modelResult.setFeedBackFormAnswer(allSpinner.get(i).getSelectedItem().toString());
+                                                arr_Result.get(j).getvID().setBackgroundColor(Color.TRANSPARENT);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            arrLstResult.add(modelResult);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    });
+                    l1.addView(spinner123);
+                    line = new View(this);
+                    buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowbacgroundopposite));
+                    l1.addView(line);
+                    spinnerArray.add(" Select Item");
+                    for (int k = 0; k < data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.size(); k++) {
+                        spinnerArray.add(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(k).OptionValue);
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+                        spinner123.setAdapter(spinnerArrayAdapter);
+                    }
+                } else if (data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType.equals("LANS")) {
+                    line = new View(this);
+                    LinearLayout.LayoutParams buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowborder));
+                    l1.addView(line);
+                    questionLayout2 = new LinearLayout(this);
+                    LinearLayout.LayoutParams buttonLayoutParamslans = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamslans.setMargins(50, 30, 10, 1);
+                    questionLayout2.setLayoutParams(buttonLayoutParamslans);
+                    questionLayout2.setOrientation(LinearLayout.HORIZONTAL);
+                    questionLayout2.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setvID(questionLayout2);
+                    lans1 = new TextView(this);
+                    LinearLayout.LayoutParams buttonLayoutParamslans1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamslans1.setMargins(0, 0, 1, 0);
+                    lans1.setLayoutParams(buttonLayoutParamslans1);
+                    lans1.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    lans1.setTextColor(getResources().getColor(R.color.blueColor));
+                    lans1.setTextSize(18);
+                    resultModel.setFeedBackFormQuotationID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setQuestion(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    resultModel.setRequired(data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired);
+                    modelResult.setFeedbackFormQuestionID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    arr_Result.add(resultModel);
+                    questionLayout2.addView(lans1);
+                    isrequerdIconclans = new TextView(this);
+                    isrequerdIconclans.setText("*");
+                    isrequerdIconclans.setTextSize(18);
+                    isrequerdIconclans.setTextColor(getResources().getColor(R.color.red));
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired.equals(false)) {
+                        isrequerdIconclans.setVisibility(View.GONE);
+                    }
+                    questionLayout2.addView(isrequerdIconclans);
+                    l1.addView(questionLayout2);
+                    remarks1 = new TextView(this);
+                    LinearLayout.LayoutParams buttonLayoutParams12345 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12345.setMargins(50, 5, 20, 30);
+
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks.equals("")) {
+                        remarks1.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks);
+                    } else {
+                        remarks1.setText("(" + data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks + ")");
+                    }
+                    remarks1.setTextSize(10);
+                    remarks1.setTextColor(getResources().getColor(R.color.blueColor));
+                    remarks1.setLayoutParams(buttonLayoutParams12345);
+                    l1.addView(remarks1);
+                    edt_lans1 = new EditText(this);
+                    edt_lans1.setHint("Enter Details");
+                    edt_lans1.setLines(4);
+                    edt_lans1.setBackgroundResource(R.drawable.roundcorner);
+                    edt_lans1.setGravity(Gravity.LEFT | Gravity.TOP);
+                    LinearLayout.LayoutParams buttonLayoutParams12 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12.setMargins(80, 30, 70, 30);
+                    edt_lans1.setLayoutParams(buttonLayoutParams12);
+                    edt_lans1.setPadding(30, 20, 20, 20);
+                    allEds.add(edt_lans1);
+                    edt_lans1.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    edtID = edt_lans1.getId();
+                    LongAns1 = edt_lans1.getText().toString();
+
+                    l1.addView(edt_lans1);
+                    line = new View(this);
+                    buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowbacgroundopposite));
+                    l1.addView(line);
+                    l1.getRootView().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            index = (v.getId());
+                        }
+                    });
+
+                    edt_lans1.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            for (int j = 0; j < arr_Result.size(); j++) {
+                                for (int i = 0; i < allEds.size(); i++) {
+                                    index = allEds.get(i).getId();
+                                    if (index != 0) {
+                                        int iid = index;
+                                        Log.d("edt_lan1", iid + "");
+                                        int iidresult = arr_Result.get(j).getFeedBackFormQuotationID();
+                                        Log.d("iidresult", iidresult + "");
+                                        if (iid == iidresult) {
+                                            arr_Result.get(j).setFeedBackFormAnswer(allEds.get(i).getText().toString());
+                                            modelResult.setFeedBackFormAnswer(allEds.get(i).getText().toString());
+                                            arr_Result.get(j).getvID().setBackgroundColor(Color.TRANSPARENT);
+                                        }
+                                    }
+                                }
+                            }
+                            arrLstResult.add(modelResult);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    }
+
+
+                    );
+                } else if (data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType.equals("RDB")) {
+                    line = new View(this);
+                    LinearLayout.LayoutParams buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowborder));
+                    l1.addView(line);
+                    questionLayout3 = new LinearLayout(this);
+                    LinearLayout.LayoutParams buttonLayoutParamsrdb = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamsrdb.setMargins(50, 30, 10, 1);
+                    questionLayout3.setLayoutParams(buttonLayoutParamsrdb);
+                    questionLayout3.setOrientation(LinearLayout.HORIZONTAL);
+                    questionLayout3.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setvID(questionLayout3);
+                    LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams.setMargins(0, 0, 1, 0);
+                    rdbtxt = new TextView(this);
+                    rdbtxt.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    rdbtxt.setTextColor(getResources().getColor(R.color.blueColor));
+
+
+                    rdbtxt.setTextSize(18);
+                    rdbtxt.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    rdbtxt.setLayoutParams(buttonLayoutParams);
+                    resultModel.setFeedBackFormQuotationID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setQuestion(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    resultModel.setRequired(data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired);
+                    modelResult.setFeedbackFormQuestionID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    arr_Result.add(resultModel);
+                    rdbtxt.setLayoutParams(buttonLayoutParams);
+                    questionLayout3.addView(rdbtxt);
+                    isrequerdIconrdb = new TextView(this);
+                    isrequerdIconrdb.setText("*");
+                    isrequerdIconrdb.setTextSize(18);
+                    isrequerdIconrdb.setTextColor(getResources().getColor(R.color.red));
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired.equals(false)) {
+                        isrequerdIconrdb.setVisibility(View.GONE);
+                    }
+                    questionLayout3.addView(isrequerdIconrdb);
+                    l1.addView(questionLayout3);
+                    final RadioGroup radioGroup = new RadioGroup(this);
+                    radioGroup.setOrientation(LinearLayout.HORIZONTAL);
+                    LinearLayout.LayoutParams buttonLayoutParams123 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams123.setMargins(80, 20, 0, 20);
+                    radioGroup.setLayoutParams(buttonLayoutParams123);
+                    LinearLayout.LayoutParams buttonLayoutParams12345 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12345.setMargins(50, 5, 20, 30);
+                    chekText = new TextView(this);
+
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks.equals("")) {
+                        chekText.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks);
+                    } else {
+                        chekText.setText("(" + data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks + ")");
+                    }
+                    chekText.setTextColor(getResources().getColor(R.color.blueColor));
+                    chekText.setTextSize(10);
+                    chekText.setLayoutParams(buttonLayoutParams12345);
+                    l1.addView(chekText);
+                    radioGroup.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    rdbID = radioGroup.getId();
+                    for (int l = 0; l < data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.size(); l++) {
+                        radioButton = new RadioButton(this);
+                        radioButton.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(l).OptionValue);
+                        radioButton.setTextColor(getResources().getColor(R.color.greycolor));
+                        radioButton.setPadding(10, 0, 20, 0);
+                        radioButton.setButtonDrawable(R.drawable.ic_radio_button_unchecked_black_24dp);
+                        radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                                try  {
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                                } catch (Exception e) {
+
+                                }
+                                String RdbResult = buttonView.getText().toString();
+                                if (buttonView.isChecked()) {
+                                    ALLRadioButton = (RdbResult);
+                                    for (int j = 0; j < arr_Result.size(); j++) {
+                                        if (radioGroup.getId() == arr_Result.get(j).getFeedBackFormQuotationID()) {
+                                            arr_Result.get(j).setFeedBackFormAnswer(ALLRadioButton);
+                                            modelResult.setFeedBackFormAnswer(ALLRadioButton);
+                                            arr_Result.get(j).getvID().setBackgroundColor(Color.TRANSPARENT);
+                                        }
+                                    }
+                                    Log.d("RdbResult", RdbResult);
+                                    buttonView.setButtonDrawable(R.drawable.ic_radio_button_checked_black_24dp);
+                                } else {
+                                    ALLRadioButton = (RdbResult);
+                                    Log.d("Remove", RdbResult);
+                                    for (int j = 0; j < arr_Result.size(); j++) {
+                                        if (radioGroup.getId() == arr_Result.get(j).getFeedBackFormQuotationID()) {
+                                            arr_Result.get(j).setFeedBackFormAnswer(ALLRadioButton);
+                                            modelResult.setFeedBackFormAnswer(ALLRadioButton);
+                                        }
+                                    }
+                                    buttonView.setButtonDrawable(R.drawable.ic_radio_button_unchecked_black_24dp);
+                                }
+                                arrLstResult.add(modelResult);
+                            }
+                        });
+                        radioGroup.addView(radioButton);
+                    }
+                    l1.addView(radioGroup);
+                    line = new View(this);
+                    buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowbacgroundopposite));
+                    l1.addView(line);
+                } else if (data.Feedbackform.lstFeedbackFormQuestion.get(i).AnsType.equals("RSTR")) {
+                    line = new View(this);
+                    LinearLayout.LayoutParams buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowborder));
+                    l1.addView(line);
+                    questionLayout4 = new LinearLayout(this);
+                    LinearLayout.LayoutParams buttonLayoutParamsrdb = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParamsrdb.setMargins(50, 30, 10, 1);
+                    questionLayout4.setLayoutParams(buttonLayoutParamsrdb);
+                    questionLayout4.setOrientation(LinearLayout.HORIZONTAL);
+                    questionLayout4.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setvID(questionLayout4);
+                    LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams.setMargins(0, 0, 1, 0);
+                    rstrtxt = new TextView(this);
+                    rstrtxt.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    rstrtxt.setTextColor(getResources().getColor(R.color.blueColor));
+                    rstrtxt.setTextSize(18);
+                    rstrtxt.setLayoutParams(buttonLayoutParams);
+                    rstrtxt.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setFeedBackFormQuotationID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    resultModel.setQuestion(data.Feedbackform.lstFeedbackFormQuestion.get(i).Question);
+                    resultModel.setRequired(data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired);
+                    modelResult.setFeedbackFormQuestionID(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    arr_Result.add(resultModel);
+                    rstrtxt.setLayoutParams(buttonLayoutParams);
+                    questionLayout4.addView(rstrtxt);
+                    isrequerdIconrstr = new TextView(this);
+                    isrequerdIconrstr.setText("*");
+                    isrequerdIconrstr.setTextSize(18);
+                    isrequerdIconrstr.setTextColor(getResources().getColor(R.color.red));
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired.equals(false)) {
+                        isrequerdIconrstr.setVisibility(View.GONE);
+                    }
+                    questionLayout4.addView(isrequerdIconrstr);
+                    l1.addView(questionLayout4);
+                    LinearLayout.LayoutParams buttonLayoutParams12345 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    buttonLayoutParams12345.setMargins(50, 5, 20, 30);
+                    chekText = new TextView(this);
+
+                    if (data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks.equals("")) {
+                        chekText.setText(data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks);
+                    } else {
+                        chekText.setText("(" + data.Feedbackform.lstFeedbackFormQuestion.get(i).Remarks + ")");
+                    }
+                    chekText.setTextColor(getResources().getColor(R.color.blueColor));
+                    chekText.setTextSize(10);
+                    chekText.setLayoutParams(buttonLayoutParams12345);
+                    l1.addView(chekText);
+                    l1.getRootView().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Ratingindex = (v.getId());
+                        }
+                    });
+                    final LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(80, 20, 0, 20);
+                    ratingBar = new RatingBar(this);
+                    ratingBar.setLayoutParams(layoutParams);
+                    allRatingBar.add(ratingBar);
+                    b12345 = data.Feedbackform.lstFeedbackFormQuestion.get(i).IsRequired;
+                    ratingBar.setId(data.Feedbackform.lstFeedbackFormQuestion.get(i).FeedbackFormQuestionID);
+                    rstrID = ratingBar.getId();
+                    ratingStrvalue = new ArrayList<>();
+                    for (int l = 0; l < data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.size(); l++) {
+                        ratingBar.setNumStars(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(l).SrNo);
+                        ratingBar.setStepSize(1);
+                        rstr = data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(l).FeedbackFormQuestionID;
+                        ratingStrvalue.add(data.Feedbackform.lstFeedbackFormQuestion.get(i).lstFeedbackFormQuestionOption.get(l).OptionValue);
+                    }
+                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                        @Override
+                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+
+                            try  {
+                                InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                            } catch (Exception e) {
+
+                            }
+                            valrat = (int) rating;
+                            int qid = ratingBar.getId();
+                            for (int j = 0; j < data.Feedbackform.lstFeedbackFormQuestion.size(); j++) {
+                                if (data.Feedbackform.lstFeedbackFormQuestion.get(j).FeedbackFormQuestionID == qid) {
+                                    for (int k = 0; k < data.Feedbackform.lstFeedbackFormQuestion.get(j).lstFeedbackFormQuestionOption.size(); k++) {
+                                        if (data.Feedbackform.lstFeedbackFormQuestion.get(j).lstFeedbackFormQuestionOption.get(k).SrNo == valrat) {
+                                            //  Toast.makeText(Dynamic_Feedback.this, data.Feedbackform.lstFeedbackFormQuestion.get(j).lstFeedbackFormQuestionOption.get(k).OptionValue, Toast.LENGTH_SHORT).show();
+                                            AllRatingstr = data.Feedbackform.lstFeedbackFormQuestion.get(j).lstFeedbackFormQuestionOption.get(k).OptionValue;
+                                            for (int j123 = 0; j123 < arr_Result.size(); j123++) {
+                                                for (int l = 0; l < allRatingBar.size(); l++) {
+                                                    int ratingid = arr_Result.get(j123).FeedBackFormQuotationID;
+                                                    if (ratingBar.getId() == ratingid) {
+                                                        arr_Result.get(j123).setFeedBackFormAnswer(AllRatingstr);
+                                                        modelResult.setFeedBackFormAnswer(AllRatingstr);
+                                                        arr_Result.get(j123).getvID().setBackgroundColor(Color.TRANSPARENT);
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                            arrLstResult.add(modelResult);
+                        }
+                    });
+                    l1.addView(ratingBar);
+                    line = new View(this);
+                    buttonLayoutParams2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 7);
+                    buttonLayoutParams2.setMargins(0, 30, 0, 30);
+                    line.setLayoutParams(buttonLayoutParams2);
+                    line.setBackground(this.getResources().getDrawable(R.drawable.shadowbacgroundopposite));
+                    l1.addView(line);
+                    Log.d("sizeresult", arr_Result.size() + "");
+                }
+            }
+            submit_result = new Button(this);
+            LinearLayout.LayoutParams buttonLayoutparammm = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            buttonLayoutparammm.setMargins(0, 70, 0, 70);
+            submit_result.setLayoutParams(buttonLayoutparammm);
+            submit_result.setText("Submit");
+            submit_result.setBackgroundResource(R.drawable.submitbutton);
+            buttonLayoutparammm.gravity = Gravity.CENTER_HORIZONTAL;
+            submit_result.setLayoutParams(buttonLayoutparammm);
+            submit_result.setTextColor(Color.WHITE);
+            l1.addView(submit_result);
+            submit_result.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (validationField()) {
+                        feedBackFormInput();
+                        showmsg();
+                    }
+                }
+            });
+        } catch (Exception e) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setMessage(e.getMessage());
+            alertDialogBuilder.show();
+        }
+    }
+
+    public boolean validationField() {
+
+        boolean result = true;
+        for (int j = 0; j < arr_Result.size(); j++) {
+            if (arr_Result.get(j).getRequired() == true && (arr_Result.get(j).getFeedBackFormAnswer().equals("") || arr_Result.get(j).getFeedBackFormAnswer().equals(" Select Item"))) {
+                nestedscrollID.smoothScrollTo(0, arr_Result.get(j).getvID().getTop());
+                arr_Result.get(j).getvID().setBackgroundColor(Color.YELLOW);
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private void feedBackFormInput() {
+
+
+
+
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        arr_ResultAccountDetailsFeedBack = new ArrayList<>();
+        arr_ResultAccountDetailsFeedBack.add(resultAccountDetailsFeedBack);
+        String url = "http://192.168.1.101:81/ExtremeWS.svc/UploadFeedBackForm";
+        Map<String, Object> jsonObject1 = new HashMap<>();
+        JSONObject jsonObjectMember = new JSONObject();
+        //resultAccountDetailsFeedBack = new ResultAccountDetailsFeedBack();
+        try {
+            jsonObjectMember.put("AccountID", AcountID);
+            jsonObjectMember.put("AccountName", AcntName);
+            jsonObjectMember.put("MobileNo", AccountMobile);
+            jsonObjectMember.put("FeedbackFormID", feedbackFormID);
+            JSONArray jsonArray = new JSONArray();
+            for (int i = 0; i < arr_Result.size(); i++) {
+                jsonObjectMember.put("lstAnswer", jsonArray.put(getJSONObject(i)));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonObject1.put("input", jsonObjectMember);
+        JSONObject Json = new JSONObject(jsonObject1);
+        RequestQueue queue = Volley.newRequestQueue(Dynamic_Feedback.this);
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(jsonObject1), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    progressDialog.dismiss();
+                    JSONObject jsonObject = response.getJSONObject("UploadFeedBackFormResult");
+                    if (jsonObject.getBoolean("HasError")) {
+                        jsonObject.getInt("ErrorCode");
+                    } else {
+                        JSONArray ja = jsonObject.getJSONArray("Messages");
+                        msg = "";
+                        for (int i = 0; i < ja.length(); i++) {
+                            msg = ja.getString(0);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Dynamic_Feedback.this);
+                        alertDialogBuilder.setMessage(error.getMessage());
+                        alertDialogBuilder.show();
+                    }
+                }) {
+            /** Passing some request headers* */
+            @Override
+            public Map getHeaders() {
+                HashMap headers = new HashMap();
+                headers.put("dvd", Helper.dvd);
+                headers.put("tkt", Helper.tkt);
+                return headers;
+            }
+        };
+        progressDialog.dismiss();
+        queue.add(jsonObjReq);
+    }
+
+    public void showmsg() {
+        try {
+
+
+
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#004776"));
+        pDialog.setTitleText("Thank You");
+        pDialog.setContentText(AcntName);
+        pDialog.setCancelable(false);
+        pDialog.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+            @Override
+            public void onClick(SweetAlertDialog sweetAlertDialog) {
+                Intent i = new Intent(Dynamic_Feedback.this, Dynamic_Feedback_mobile.class);
+                startActivity(i);
+            }
+        });
+        pDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(Dynamic_Feedback.this, Dynamic_Feedback_mobile.class);
+                intent.putExtra("yo", 0);
+                if (Build.VERSION.SDK_INT >= 16) {
+                    //The code below is for the cool transition effect that happens once the player clicks the play button..!
+                    Bundle translateBundle = ActivityOptions.makeCustomAnimation(
+                            Dynamic_Feedback.this,
+                            R.anim.activity_slide_up,
+                            R.anim.activity_slide_out_upwards).toBundle();
+                    startActivity(intent, translateBundle);
+                    pDialog.dismiss();
+                    finish();
+                } else {
+                    startActivity(intent);
+                    pDialog.dismiss();
+                    finish();
+                }
+            }
+        }, 3000);
+        } catch (Exception e)
+        {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Dynamic_Feedback.this);
+
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.alert_dialog_authentication,null);
+
+        // Specify alert dialog is not cancelable/not ignorable
+        builder.setCancelable(false);
+
+        // Set the custom layout as alert dialog view
+        builder.setView(dialogView);
+
+        // Get the custom alert dialog view widgets reference
+        Button btn_positive = (Button) dialogView.findViewById(R.id.dialog_positive_btn);
+        Button btn_negative = (Button) dialogView.findViewById(R.id.dialog_negative_btn);
+         final EditText et_namepwd = (EditText) dialogView.findViewById(R.id.et_name);
+
+        // Create the alert dialog
+         final AlertDialog dialog = builder.create();
+
+        // Set positive/yes button click listener
+        btn_positive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the alert dialog
+
+                if(et_namepwd.getText().toString().equals(""))
+                {
+                    et_namepwd.setError("Password required");
+                    //Toast.makeText(Dynamic_Feedback.this, "Password mismatch", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    String pwd = et_namepwd.getText().toString().trim();
+                    ValidateUserPassword(pwd);
+                }
+
+            }
+        });
+
+        // Set negative/no button click listener
+        btn_negative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
+        // Display the custom alert dialog on interface
+        dialog.show();
+    }
+       /* AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Enter Password.");
+        alertDialogBuilder.setPositiveButton("yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Intent i = new Intent(Dynamic_Feedback.this, Dynamic_Feedback_mobile.class);
+                        startActivity(i);
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();*/
+
+
+    public JSONObject getJSONObject(int s) {
+        JSONObject objJSOnObject = new JSONObject();
+        try {
+            objJSOnObject.put("FeedBackFormQuotationID", arr_Result.get(s).getFeedBackFormQuotationID());
+            objJSOnObject.put("FeedBackFormAnswer", arr_Result.get(s).getFeedBackFormAnswer());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return objJSOnObject;
+    }
+
+
+    private void ValidateUserPassword(String pwd)
+    {
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        String url = "http://192.168.1.101:81/ExtremeWS.svc/ValidateUserPassword";
+        JSONObject jsonValidateMember = new JSONObject();
+        try {
+            jsonValidateMember.put("Password", pwd);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestQueue queue = Volley.newRequestQueue(Dynamic_Feedback.this);
+        JsonObjectRequest jsonObjReqValidate = new JsonObjectRequest(Request.Method.POST, url, jsonValidateMember, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    progressDialog.dismiss();
+                    JSONObject jsonObject = response.getJSONObject("ValidateUserPasswordResult");
+                    if (jsonObject.getBoolean("HasError")) {
+                        jsonObject.getInt("ErrorCode");
+
+
+                            Toast.makeText(Dynamic_Feedback.this, "Password mismatch", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+                      //  Toast.makeText(Dynamic_Feedback.this, jsonObject.getBoolean("HasError")+"", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        JSONArray ja = jsonObject.getJSONArray("Messages");
+                        msg = "";
+                        for (int i = 0; i < ja.length(); i++) {
+                            msg = ja.getString(i);
+                            Toast.makeText(Dynamic_Feedback.this, msg, Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        Intent ijk = new Intent(Dynamic_Feedback.this,Dynamic_Feedback_mobile.class);
+                        startActivity(ijk);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Dynamic_Feedback.this);
+                        alertDialogBuilder.setMessage(error.getMessage());
+                        alertDialogBuilder.show();
+                    }
+                }) {
+            /** Passing some request headers* */
+            @Override
+            public Map getHeaders() {
+                HashMap headers = new HashMap();
+                headers.put("dvd", Helper.dvd);
+                headers.put("tkt", Helper.tkt);
+                return headers;
+            }
+        };
+        progressDialog.dismiss();
+        queue.add(jsonObjReqValidate);
+
+    }
+
+
+
+
+}
+
+
+
+
+
+
